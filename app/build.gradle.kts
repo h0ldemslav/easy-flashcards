@@ -115,4 +115,7 @@ dependencies {
 
     // Pager
     implementation("androidx.compose.foundation:foundation:1.6.0-alpha07")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.0")
 }

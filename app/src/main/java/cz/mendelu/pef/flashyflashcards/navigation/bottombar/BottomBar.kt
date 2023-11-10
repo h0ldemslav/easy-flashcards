@@ -4,6 +4,7 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -20,10 +21,12 @@ fun BottomBar(
     val currentDestination: Destination? =
         navController.appCurrentDestinationAsState().value ?: NavGraphs.root.startAppDestination
 
-    BottomNavigation {
+    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.surface) {
         BottomBarDestination.values().forEach { destination ->
+            val selected = currentDestination?.route == destination.graph.startRoute.route
+
             BottomNavigationItem(
-                selected = currentDestination?.route == destination.graph.route,
+                selected = selected,
                 onClick = {
                     navController.navigate(destination.graph.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -36,11 +39,22 @@ fun BottomBar(
                 icon = {
                     Icon(
                         imageVector = destination.icon,
+                        tint = if (selected)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.onSurface,
                         contentDescription = stringResource(id = destination.label)
                     )
                 },
                 label = {
-                    Text(text = stringResource(id = destination.label))
+                    Text(
+                        text = stringResource(id = destination.label),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (selected)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.onSurface
+                    )
                 }
             )
         }

@@ -37,7 +37,7 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import cz.mendelu.pef.flashyflashcards.R
 import cz.mendelu.pef.flashyflashcards.ui.screens.NavGraphs
 import cz.mendelu.pef.flashyflashcards.ui.theme.Pink40
-import cz.mendelu.pef.flashyflashcards.ui.theme.Purple30
+import cz.mendelu.pef.flashyflashcards.ui.theme.PinkPrimaryLight
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.extraMediumMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.halfMargin
@@ -74,6 +74,7 @@ fun WelcomeScreen(
                             animationSpec = tween(durationMillis = 550)
                         )
                     } else {
+                        viewModel.setOnboardingFinished()
                         navController.navigate(NavGraphs.collections.startRoute.route)
                     }
                 }
@@ -120,7 +121,7 @@ fun OnBoardingPageContent(
             modifier = Modifier
                 .size(132.dp)
                 .clip(CircleShape)
-                .background(Purple30),
+                .background(PinkPrimaryLight),
             contentAlignment = Alignment.Center
         ) {
             Image(

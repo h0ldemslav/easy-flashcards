@@ -9,11 +9,13 @@ import cz.mendelu.pef.flashyflashcards.ui.screens.NavGraphs
 
 @Composable
 fun DestinationsNavHostWrapper(
-    navGraph: NavGraphSpec = NavGraphs.root,
-    navController: NavHostController = rememberNavController()
+    navGraph: NavGraphSpec,
+    navController: NavHostController = rememberNavController(),
 ) {
     DestinationsNavHost(
-        navGraph = navGraph,
-        navController = navController
+        navGraph = NavGraphs.root,
+        navController = navController,
+        // Start destination root cannot use the same route as the graph
+        startRoute = if (navGraph == NavGraphs.root) navGraph.startRoute else navGraph
     )
 }

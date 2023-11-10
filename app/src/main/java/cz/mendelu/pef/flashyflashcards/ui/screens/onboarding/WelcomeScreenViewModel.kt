@@ -10,6 +10,7 @@ import javax.inject.Inject
 class WelcomeScreenViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : BaseViewModel() {
+
     fun getOnBoardingPages(): List<OnBoardingPage> {
         return listOf(
             OnBoardingPage.Welcome,
@@ -21,14 +22,6 @@ class WelcomeScreenViewModel @Inject constructor(
     fun setOnboardingFinished() {
         launch {
             dataStoreRepository.setOnboardingFinished()
-        }
-    }
-
-    fun isOnboardingFinished() {
-        launch {
-            dataStoreRepository.isOnboardingFinished().collect {
-                // TODO: save boolean to uiState and use it in Welcome Screen
-            }
         }
     }
 }

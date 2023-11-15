@@ -16,4 +16,14 @@
     <string name="category_label">Category</string>
     <string name="city_label">City</string>
     <string name="explore_screen_city_input_error">City must not be empty</string>
+    <string name="city_not_found">City with specified name is not found.</string>
+    <string name="unauthorized_access">Unauthorized access. Please check your API key.</string>
+    <string name="unable_to_query">Unable to query the server. Please check your API key.</string>
+    <string name="too_many_requests">Cannot query the server. Exceeded daily query quota.</string>
+    <string name="server_error">The server received an internal error.</string>
+    <string name="server_down">The server is currently down.</string>
+    <string name="unknown_status_code">Unknown status code. Please send us a feedback.</string>
+    <string name="exception">Application exception. Please send us a feedback.</string>
+    <string name="yelp_logo">Yelp Logo</string>
+    <string name="reviews">Reviews</string>
 </resources>

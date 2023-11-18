@@ -1,5 +1,6 @@
 package cz.mendelu.pef.flashyflashcards.ui.elements
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import cz.mendelu.pef.flashyflashcards.R
 
@@ -36,7 +38,8 @@ fun BasicScaffold(
                         IconButton(onClick = onBackClick) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = stringResource(R.string.navigation_icon_back)
+                                contentDescription = stringResource(R.string.navigation_icon_back),
+                                tint = if (isSystemInDarkTheme()) Color.White else Color.Black
                             )
                         }
                     }

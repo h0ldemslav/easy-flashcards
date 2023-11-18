@@ -12,4 +12,6 @@ interface YelpAPIRepository : BaseRemoteRepository {
             CommunicationResult<YelpResponse>
 
     fun convertBusinessDTOToBusiness(businessDTO: BusinessDTO): Business
+    fun cacheBusiness(business: Business)
+    fun getCachedBusiness(): Business?
 }

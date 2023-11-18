@@ -1,6 +1,7 @@
 package cz.mendelu.pef.flashyflashcards.ui.screens.explore
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,12 +41,14 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.navigate
 import cz.mendelu.pef.flashyflashcards.R
 import cz.mendelu.pef.flashyflashcards.architecture.UiState
 import cz.mendelu.pef.flashyflashcards.extensions.getImageStarsResFromFloat
 import cz.mendelu.pef.flashyflashcards.extensions.isAtBottom
 import cz.mendelu.pef.flashyflashcards.model.Business
 import cz.mendelu.pef.flashyflashcards.model.BusinessCategory
+import cz.mendelu.pef.flashyflashcards.model.DataSourceType
 import cz.mendelu.pef.flashyflashcards.navigation.bottombar.BottomBar
 import cz.mendelu.pef.flashyflashcards.navigation.graphs.ExploreNavGraph
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicScaffold
@@ -49,6 +56,7 @@ import cz.mendelu.pef.flashyflashcards.ui.elements.BasicTextFieldElement
 import cz.mendelu.pef.flashyflashcards.ui.elements.DropDownElement
 import cz.mendelu.pef.flashyflashcards.ui.elements.LoadingScreenCircleIndicator
 import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
+import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.DetailScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.halfMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.smallMargin
@@ -64,10 +72,19 @@ fun ExploreScreen(
         topAppBarTitle = stringResource(id = R.string.explore),
         bottomAppBar = {
             BottomBar(navController = navController)
+        },
+        actions = {
+            IconButton(onClick = {}) {
+                Icon(
+                    imageVector = Icons.Default.Bookmarks,
+                    contentDescription = stringResource(id = R.string.img_alt_bookmarks)
+                )
+            }
         }
     ) { paddingValues ->
         ExploreScreenContent(
             paddingValues = paddingValues,
+            navController = navController,
             uiState = viewModel.uiState,
             screenData = viewModel.screenData,
             actions = viewModel
@@ -78,6 +95,7 @@ fun ExploreScreen(
 @Composable
 fun ExploreScreenContent(
     paddingValues: PaddingValues,
+    navController: NavController,
     uiState: UiState<MutableList<Business>, ExploreErrors>,
     screenData: ExploreScreenData,
     actions: ExploreScreenActions
@@ -109,7 +127,6 @@ fun ExploreScreenContent(
     ) {
         Text(
             text = stringResource(id = R.string.explore_screen_info_text),
-            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -156,7 +173,12 @@ fun ExploreScreenContent(
             LazyColumn(state = lazyListState) {
                 uiState.data!!.forEach { business ->
                     item {
-                        BusinessRow(business = business)
+                        BusinessRow(business = business) {
+                            actions.cacheBusiness(business)
+                            navController.navigate(
+                                DetailScreenDestination(dataSourceType = DataSourceType.Remote)
+                            )
+                        }
                     }
                 }
             }
@@ -175,10 +197,12 @@ fun ExploreScreenContent(
 
 @Composable
 fun BusinessRow(
-    business: Business
+    business: Business,
+    onRowClick: () -> Unit
 ) {
     Row(modifier = Modifier
         .fillMaxWidth()
+        .clickable { onRowClick() }
         .padding(vertical = 12.dp)
     ) {
         AsyncImage(
@@ -200,21 +224,19 @@ fun BusinessRow(
             .fillMaxWidth()
             .padding(start = basicMargin())
         ) {
-            if (business.name.length > 24) {
-                business.name = business.name.slice(0..23) + "..."
-            }
-
             Text(
-                text = business.name,
+                text = if (business.name.length > 24)
+                    business.name.slice(0..23) + "..."
+                else
+                    business.name,
                 style = MaterialTheme.typography.bodyLarge
             )
 
-            if (business.category.length > 16) {
-                business.category = business.category.slice(0..15) + "..."
-            }
-
             Text(
-                text = business.category,
+                text = if (business.category.length > 16)
+                    business.category.slice(0..15) + "..."
+                else
+                    business.category,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary
             )

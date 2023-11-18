@@ -59,6 +59,10 @@ class ExploreScreenViewModel @Inject constructor(
         }
     }
 
+    override fun cacheBusiness(business: Business) {
+        yelpAPIRepository.cacheBusiness(business)
+    }
+
     private fun getBusinesses(offset: Int) {
         launch {
             val result = yelpAPIRepository.getBusinessesByQuery(

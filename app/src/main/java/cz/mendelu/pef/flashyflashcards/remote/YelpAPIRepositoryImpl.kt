@@ -12,11 +12,15 @@ class YelpAPIRepositoryImpl @Inject constructor(
     private val yelpAPI: YelpAPI
 ) : YelpAPIRepository {
 
+    private var lastCachedBusiness: Business? = null
+
     override suspend fun getBusinessesByQuery(
         locationName: String,
         categories: String,
         offset: Int
     ): CommunicationResult<YelpResponse> {
+        lastCachedBusiness = null
+
         val categoriesList = categories.split(", ")
 
         return withContext(Dispatchers.IO) {
@@ -38,4 +42,10 @@ class YelpAPIRepositoryImpl @Inject constructor(
             longitude = businessDTO.coordinates.longitude.toDouble()
         )
     }
+
+    override fun cacheBusiness(business: Business) {
+        lastCachedBusiness = business
+    }
+
+    override fun getCachedBusiness(): Business? = lastCachedBusiness
 }

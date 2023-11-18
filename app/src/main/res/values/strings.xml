@@ -11,7 +11,7 @@
     <string name="welcome_screen_translation_text">Thanks to Google ML Kit you can quickly translate unknown word</string>
     <string name="continue_label">Continue</string>
     <string name="no_internet_connection">Unable to connect. Please check your internet connection.</string>
-    <string name="explore_screen_info_text">Improve speaking skills by visiting cultural places</string>
+    <string name="explore_screen_info_text">Improve speaking by visiting cultural places</string>
     <string name="search_label">Search</string>
     <string name="category_label">Category</string>
     <string name="city_label">City</string>
@@ -26,4 +26,9 @@
     <string name="exception">Application exception. Please send us a feedback.</string>
     <string name="yelp_logo">Yelp Logo</string>
     <string name="reviews">Reviews</string>
+    <string name="detail">Detail</string>
+    <string name="bookmark_label">Bookmark</string>
+    <string name="yelp_link_text">Visit Yelp for more information</string>
+    <string name="img_alt_bookmarks">Bookmarks</string>
+    <string name="something_went_wrong_error">Something went wrong. Please try again.</string>
 </resources>

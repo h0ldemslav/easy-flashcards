@@ -123,11 +123,19 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
 
     // ML Kit Translation
-    implementation("com.google.mlkit:translate:17.0.1")
+    implementation("com.google.mlkit:translate:17.0.2")
 
     // Pager
     implementation("androidx.compose.foundation:foundation:1.6.0-alpha07")
 
     // Splash Screen
     implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // Room
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.room:room-ktx:2.4.3")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    kapt("androidx.room:room-compiler:2.4.3")
+    implementation("androidx.room:room-runtime:2.4.3")
 }

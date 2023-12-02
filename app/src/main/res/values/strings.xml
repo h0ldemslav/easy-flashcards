@@ -35,4 +35,5 @@
     <string name="failed_to_resolve_position_turned_off_gps">Failed to resolve position: turned off GPS</string>
     <string name="failed_to_resolve_position_location_permission_denied">Failed to resolve position: location permission was denied</string>
     <string name="failed_to_get_position_please_try_again">Failed to get position, please, try again</string>
+    <string name="add_label">Add</string>
 </resources>

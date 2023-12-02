@@ -1,4 +1,4 @@
-package cz.mendelu.pef.flashyflashcards.architecture
+package cz.mendelu.pef.flashyflashcards.model
 
 import java.io.Serializable
 

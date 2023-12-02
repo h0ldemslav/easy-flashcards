@@ -1,9 +1,9 @@
-package cz.mendelu.pef.flashyflashcards.ui.screens.explore
+package cz.mendelu.pef.flashyflashcards.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
-data class ExploreErrors(
+open class ScreenErrors(
     @DrawableRes val imageRes: Int? = null,
     @StringRes val messageRes: Int
 )

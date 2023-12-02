@@ -43,7 +43,7 @@ import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 import cz.mendelu.pef.flashyflashcards.R
-import cz.mendelu.pef.flashyflashcards.architecture.UiState
+import cz.mendelu.pef.flashyflashcards.model.UiState
 import cz.mendelu.pef.flashyflashcards.extensions.getImageStarsResFromFloat
 import cz.mendelu.pef.flashyflashcards.extensions.isAtBottom
 import cz.mendelu.pef.flashyflashcards.model.Business
@@ -56,6 +56,7 @@ import cz.mendelu.pef.flashyflashcards.ui.elements.BasicTextFieldElement
 import cz.mendelu.pef.flashyflashcards.ui.elements.DropDownElement
 import cz.mendelu.pef.flashyflashcards.ui.elements.LoadingScreenCircleIndicator
 import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
+import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.DetailScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.halfMargin
@@ -96,7 +97,7 @@ fun ExploreScreen(
 fun ExploreScreenContent(
     paddingValues: PaddingValues,
     navController: NavController,
-    uiState: UiState<MutableList<Business>, ExploreErrors>,
+    uiState: UiState<MutableList<Business>, ScreenErrors>,
     screenData: ExploreScreenData,
     actions: ExploreScreenActions
 ) {

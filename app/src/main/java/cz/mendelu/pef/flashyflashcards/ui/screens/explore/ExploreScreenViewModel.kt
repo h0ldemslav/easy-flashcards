@@ -6,11 +6,12 @@ import androidx.compose.runtime.setValue
 import cz.mendelu.pef.flashyflashcards.R
 import cz.mendelu.pef.flashyflashcards.architecture.BaseViewModel
 import cz.mendelu.pef.flashyflashcards.architecture.CommunicationResult
-import cz.mendelu.pef.flashyflashcards.architecture.UiState
+import cz.mendelu.pef.flashyflashcards.model.UiState
 import cz.mendelu.pef.flashyflashcards.model.Business
 import cz.mendelu.pef.flashyflashcards.model.Pagination
 import cz.mendelu.pef.flashyflashcards.remote.MAX_OFFSET
 import cz.mendelu.pef.flashyflashcards.remote.YelpAPIRepository
+import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class ExploreScreenViewModel @Inject constructor(
 ) : BaseViewModel(), ExploreScreenActions {
 
     var screenData by mutableStateOf(ExploreScreenData())
-    var uiState by mutableStateOf(UiState<MutableList<Business>, ExploreErrors>())
+    var uiState by mutableStateOf(UiState<MutableList<Business>, ScreenErrors>())
     private var pagination = Pagination()
 
     override fun updateScreenData(data: ExploreScreenData) {
@@ -74,7 +75,7 @@ class ExploreScreenViewModel @Inject constructor(
             when (result) {
                 CommunicationResult.ConnectionError -> {
                     uiState = UiState(
-                        errors = ExploreErrors(
+                        errors = ScreenErrors(
                             imageRes = R.drawable.undraw_signal_searching,
                             messageRes = R.string.no_internet_connection
                         )
@@ -89,7 +90,7 @@ class ExploreScreenViewModel @Inject constructor(
 
                 is CommunicationResult.Exception -> {
                     uiState = UiState(
-                        errors = ExploreErrors(
+                        errors = ScreenErrors(
                             imageRes = R.drawable.undraw_warning,
                             messageRes = R.string.exception
                         )
@@ -120,17 +121,17 @@ class ExploreScreenViewModel @Inject constructor(
         return data.name.isNotEmpty()
     }
 
-    private fun getExploreErrorsByResponseStatusCode(statusCode: Int): ExploreErrors {
+    private fun getExploreErrorsByResponseStatusCode(statusCode: Int): ScreenErrors {
         val codesToErrors = mapOf(
-            400 to ExploreErrors(R.drawable.undraw_empty, R.string.city_not_found),
-            401 to ExploreErrors(R.drawable.undraw_security, R.string.unauthorized_access),
-            403 to ExploreErrors(R.drawable.undraw_security, R.string.unable_to_query),
-            429 to ExploreErrors(R.drawable.undraw_progress_data, R.string.too_many_requests),
-            500 to ExploreErrors(R.drawable.undraw_server_down, R.string.server_error),
-            503 to ExploreErrors(R.drawable.undraw_server_down, R.string.server_down)
+            400 to ScreenErrors(R.drawable.undraw_empty, R.string.city_not_found),
+            401 to ScreenErrors(R.drawable.undraw_security, R.string.unauthorized_access),
+            403 to ScreenErrors(R.drawable.undraw_security, R.string.unable_to_query),
+            429 to ScreenErrors(R.drawable.undraw_progress_data, R.string.too_many_requests),
+            500 to ScreenErrors(R.drawable.undraw_server_down, R.string.server_error),
+            503 to ScreenErrors(R.drawable.undraw_server_down, R.string.server_down)
         )
 
-        return codesToErrors[statusCode] ?: ExploreErrors(
+        return codesToErrors[statusCode] ?: ScreenErrors(
             R.drawable.undraw_exploring,
             R.string.unknown_status_code
         )

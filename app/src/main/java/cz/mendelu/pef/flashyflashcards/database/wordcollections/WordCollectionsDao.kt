@@ -1,0 +1,17 @@
+package cz.mendelu.pef.flashyflashcards.database.wordcollections
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import cz.mendelu.pef.flashyflashcards.model.WordCollectionEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface WordCollectionsDao {
+
+    @Query("SELECT * FROM word_collections")
+    fun getAllWordCollections(): Flow<List<WordCollectionEntity>>
+
+    @Insert
+    suspend fun createNewWordCollection(collectionEntity: WordCollectionEntity)
+}

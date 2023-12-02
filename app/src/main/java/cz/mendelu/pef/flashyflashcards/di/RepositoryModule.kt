@@ -1,5 +1,8 @@
 package cz.mendelu.pef.flashyflashcards.di
 
+import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsDao
+import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsRepository
+import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsRepositoryImpl
 import cz.mendelu.pef.flashyflashcards.remote.YelpAPI
 import cz.mendelu.pef.flashyflashcards.remote.YelpAPIRepository
 import cz.mendelu.pef.flashyflashcards.remote.YelpAPIRepositoryImpl
@@ -13,8 +16,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
+    // Remote
+    //
     @Provides
     @Singleton
     fun provideYelpAPIRepository(yelpAPI: YelpAPI): YelpAPIRepository =
         YelpAPIRepositoryImpl(yelpAPI)
+
+    // Local
+    //
+    @Provides
+    @Singleton
+    fun provideWordCollectionsRepository(dao: WordCollectionsDao): WordCollectionsRepository =
+        WordCollectionsRepositoryImpl(dao)
 }

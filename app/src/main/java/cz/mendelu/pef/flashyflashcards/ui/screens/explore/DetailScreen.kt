@@ -53,7 +53,7 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.ramcosta.composedestinations.annotation.Destination
 import cz.mendelu.pef.flashyflashcards.R
-import cz.mendelu.pef.flashyflashcards.architecture.UiState
+import cz.mendelu.pef.flashyflashcards.model.UiState
 import cz.mendelu.pef.flashyflashcards.extensions.isLocationPermissionGranted
 import cz.mendelu.pef.flashyflashcards.model.Business
 import cz.mendelu.pef.flashyflashcards.model.DataSourceType
@@ -62,6 +62,7 @@ import cz.mendelu.pef.flashyflashcards.ui.elements.BasicScaffold
 import cz.mendelu.pef.flashyflashcards.ui.elements.HyperlinkText
 import cz.mendelu.pef.flashyflashcards.ui.elements.PermissionDialog
 import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
+import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.theme.PinkPrimaryLight
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.utils.GpsUtils
@@ -118,7 +119,7 @@ fun DetailScreen(
 @Composable
 fun DetailScreenContent(
     paddingValues: PaddingValues,
-    uiState: UiState<Business?, ExploreErrors>,
+    uiState: UiState<Business?, ScreenErrors>,
     userLocation: LatLng?
 ) {
     if (uiState.data != null) {
@@ -249,6 +250,8 @@ fun RouteButton(
                     if (it != null) {
                         onLocationChange(it)
                     } else {
+                        // Sometimes (even if with granted permission, enabled GPS and delay) location is null
+                        // Thus below toast is provided to the user
                         val toastText = context.getString(R.string.failed_to_get_position_please_try_again)
 
                         Toast.makeText(
@@ -262,8 +265,6 @@ fun RouteButton(
         } else {
             val toastText = context.getString(R.string.failed_to_resolve_position_turned_off_gps)
 
-            // Sometimes (even if with granted permission, enabled GPS and delay) location is null
-            // Thus below toast is provided to the user
             Toast.makeText(
                 context,
                 toastText,

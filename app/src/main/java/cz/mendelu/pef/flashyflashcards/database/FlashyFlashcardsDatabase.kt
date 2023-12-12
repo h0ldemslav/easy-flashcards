@@ -4,17 +4,23 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import cz.mendelu.pef.flashyflashcards.database.businesses.BusinessesDao
 import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsDao
+import cz.mendelu.pef.flashyflashcards.model.BusinessEntity
 import cz.mendelu.pef.flashyflashcards.model.WordCollectionEntity
 
 @Database(
-    entities = [WordCollectionEntity::class],
-    version = 1,
+    entities = [
+        WordCollectionEntity::class,
+        BusinessEntity::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class FlashyFlashcardsDatabase : RoomDatabase() {
 
     abstract fun wordCollectionsDao(): WordCollectionsDao
+    abstract fun businessesDao(): BusinessesDao
 
     companion object {
 

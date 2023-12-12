@@ -113,7 +113,10 @@ fun WordCollectionsScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Text(text = stringResource(id = R.string.empty_collections_placeholder))
+            PlaceholderElement(
+                imageRes = null,
+                textRes = R.string.empty_placeholder
+            )
         }
     }
 }

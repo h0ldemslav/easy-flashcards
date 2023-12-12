@@ -1,5 +1,8 @@
 package cz.mendelu.pef.flashyflashcards.di
 
+import cz.mendelu.pef.flashyflashcards.database.businesses.BusinessesDao
+import cz.mendelu.pef.flashyflashcards.database.businesses.BusinessesRepositoryImpl
+import cz.mendelu.pef.flashyflashcards.database.businesses.BusinessesRepository
 import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsDao
 import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsRepository
 import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsRepositoryImpl
@@ -29,4 +32,9 @@ object RepositoryModule {
     @Singleton
     fun provideWordCollectionsRepository(dao: WordCollectionsDao): WordCollectionsRepository =
         WordCollectionsRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun provideBusinessesRepository(dao: BusinessesDao): BusinessesRepository =
+        BusinessesRepositoryImpl(dao)
 }

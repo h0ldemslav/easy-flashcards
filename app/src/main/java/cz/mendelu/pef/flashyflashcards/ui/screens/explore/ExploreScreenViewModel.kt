@@ -150,9 +150,9 @@ class ExploreScreenViewModel @Inject constructor(
         val emptyName = business.name.isEmpty()
         val invalidLatLng = business.latitude == INVALID_LATLNG || business.longitude == INVALID_LATLNG
         val emptyDisplayAddress = business.displayAddress.isEmpty()
-        val emptyBusinessUrl = business.businessUrl.isEmpty()
+        val emptyRemoteId = business.remoteId.isEmpty()
 
-        if (emptyName || invalidLatLng || emptyDisplayAddress || emptyBusinessUrl) {
+        if (emptyName || invalidLatLng || emptyDisplayAddress || emptyRemoteId) {
             return false
         }
 

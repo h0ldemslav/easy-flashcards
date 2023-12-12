@@ -57,6 +57,7 @@ import cz.mendelu.pef.flashyflashcards.ui.elements.DropDownElement
 import cz.mendelu.pef.flashyflashcards.ui.elements.LoadingScreenCircleIndicator
 import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
 import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
+import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.BookmarksScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.DetailScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.halfMargin
@@ -75,7 +76,9 @@ fun ExploreScreen(
             BottomBar(navController = navController)
         },
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                navController.navigate(BookmarksScreenDestination)
+            }) {
                 Icon(
                     imageVector = Icons.Default.Bookmarks,
                     contentDescription = stringResource(id = R.string.img_alt_bookmarks)
@@ -177,7 +180,9 @@ fun ExploreScreenContent(
                         BusinessRow(business = business) {
                             actions.cacheBusiness(business)
                             navController.navigate(
-                                DetailScreenDestination(dataSourceType = DataSourceType.Remote)
+                                DetailScreenDestination(
+                                    dataSourceType = DataSourceType.Remote(business.remoteId)
+                                )
                             )
                         }
                     }

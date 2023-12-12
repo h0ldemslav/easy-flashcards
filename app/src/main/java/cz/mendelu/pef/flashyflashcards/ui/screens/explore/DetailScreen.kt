@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
@@ -98,6 +99,27 @@ fun DetailScreen(
         topAppBarTitle = stringResource(id = R.string.detail),
         onBackClick = { navController.popBackStack() },
         actions = {
+            if (viewModel.uiState.data?.whenAdded != null) {
+                IconButton(onClick = {
+                    if (dataSourceType is DataSourceType.Local) {
+                        navController.popBackStack()
+                    }
+
+                    viewModel.deleteBusiness()
+
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.removed_from_bookmarks),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(id = R.string.delete_label)
+                    )
+                }
+            }
+
             RouteButton(
                 context = context,
                 onLocationChange = { location ->
@@ -111,7 +133,9 @@ fun DetailScreen(
         DetailScreenContent(
             paddingValues = paddingValues,
             uiState = viewModel.uiState,
-            userLocation = userLocation
+            userLocation = userLocation,
+            actions = viewModel,
+            context = context
         )
     }
 }
@@ -120,7 +144,9 @@ fun DetailScreen(
 fun DetailScreenContent(
     paddingValues: PaddingValues,
     uiState: UiState<Business?, ScreenErrors>,
-    userLocation: LatLng?
+    userLocation: LatLng?,
+    actions: DetailScreenActions,
+    context: Context
 ) {
     if (uiState.data != null) {
         val uriHandler = LocalUriHandler.current
@@ -158,13 +184,21 @@ fun DetailScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Button(
-                    onClick = {
-                    // TODO: Save to bookmarks and show a snackbar; change button label to remove (add remove function)
-                    },
-                    modifier = Modifier.padding(top = basicMargin())
-                ) {
-                    Text(text = stringResource(id = R.string.bookmark_label))
+                if (uiState.data!!.whenAdded == null) {
+                    Button(
+                        onClick = {
+                            actions.saveBusiness()
+
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.saved_to_bookmarks),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        modifier = Modifier.padding(top = basicMargin())
+                    ) {
+                        Text(text = stringResource(id = R.string.bookmark_label))
+                    }
                 }
             }
         }

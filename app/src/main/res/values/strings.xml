@@ -44,11 +44,15 @@
     <string name="target_language_label">Target language</string>
     <string name="save_label">Save</string>
     <string name="edit_label">Edit</string>
-    <string name="empty_collections_placeholder">Empty, create new collection!</string>
+    <string name="empty_placeholder">Empty</string>
     <string name="word_collections_collection_error">Collection name must not be empty</string>
     <string name="word_collections_languages_error">Languages cannot be empty or the same</string>
     <string name="collection_dialog_title">Remove collection</string>
     <string name="collection_dialog_content">Are you sure you want to remove this collection? This will also erase all collection words.</string>
     <string name="dialog_dismiss_label">Cancel</string>
     <string name="dialog_remove_label">Remove</string>
+    <string name="saved_to_bookmarks">Saved to bookmarks</string>
+    <string name="removed_from_bookmarks">Removed from bookmarks</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="bookmarks_search_field_hint">Type city, category or place name to filter out</string>
 </resources>

@@ -12,5 +12,27 @@ data class Business(
     var reviewCount: Int,
     var latitude: Double,
     var longitude: Double,
-    var whenAdded: Long = 0L,
-)
+    var whenAdded: Long? = null
+) {
+    companion object {
+
+        fun createFromBusinessEntity(businessEntity: BusinessEntity): Business {
+            val displayAddress = businessEntity.displayAddress.split(",")
+
+            return Business(
+                id = businessEntity.id,
+                remoteId = businessEntity.remoteId,
+                name = businessEntity.name,
+                imageUrl = businessEntity.imageUrl,
+                category = businessEntity.category,
+                displayAddress = displayAddress,
+                businessUrl = businessEntity.businessUrl,
+                rating = businessEntity.rating,
+                reviewCount = businessEntity.reviewCount,
+                latitude = businessEntity.latitude,
+                longitude = businessEntity.longitude,
+                whenAdded = businessEntity.whenAdded
+            )
+        }
+    }
+}

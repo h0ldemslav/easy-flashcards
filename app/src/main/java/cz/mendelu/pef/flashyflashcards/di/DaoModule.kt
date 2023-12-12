@@ -15,4 +15,9 @@ object DaoModule {
     @Singleton
     fun provideWordCollectionsDao(flashyFlashcardsDatabase: FlashyFlashcardsDatabase) =
         flashyFlashcardsDatabase.wordCollectionsDao()
+
+    @Provides
+    @Singleton
+    fun provideBusinessesDao(flashyFlashcardsDatabase: FlashyFlashcardsDatabase) =
+        flashyFlashcardsDatabase.businessesDao()
 }

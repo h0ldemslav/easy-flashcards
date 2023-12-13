@@ -9,23 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.navigate
 import cz.mendelu.pef.flashyflashcards.R
-import cz.mendelu.pef.flashyflashcards.model.WordCollection
 import cz.mendelu.pef.flashyflashcards.navigation.bottombar.BottomBar
 import cz.mendelu.pef.flashyflashcards.navigation.graphs.CollectionsNavGraph
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicScaffold
-import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.AddEditWordScreenDestination
 
 @CollectionsNavGraph
 @Destination
 @Composable
 fun WordsScreen(
-    wordCollection: WordCollection,
-    navController: NavController
+    navController: NavController,
+    collectionId: Long?,
+    collectionName: String
 ) {
     BasicScaffold(
-        topAppBarTitle = wordCollection.name,
+        topAppBarTitle = collectionName,
         bottomAppBar = {
            BottomBar(navController = navController)
         },
@@ -34,7 +32,7 @@ fun WordsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(AddEditWordScreenDestination)
+
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,

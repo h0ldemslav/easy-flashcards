@@ -57,4 +57,5 @@
     <string name="bookmarks_search_field_hint">Type city, category or place name to filter out</string>
     <string name="translation_label">Translation</string>
     <string name="new_word">New word</string>
+    <string name="unknown_error">Unknown error, please, send us a feedback.</string>
 </resources>

@@ -7,7 +7,7 @@ data class WordCollection(
     var name: String,
     var sourceLanguage: String,
     var targetLanguage: String
-) : Serializable {
+) {
     companion object {
 
         fun createFromEntity(entity: WordCollectionEntity): WordCollection {

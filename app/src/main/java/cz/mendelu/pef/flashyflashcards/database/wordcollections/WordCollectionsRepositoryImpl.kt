@@ -12,6 +12,10 @@ class WordCollectionsRepositoryImpl @Inject constructor(
         return wordCollectionsDao.getAllWordCollections()
     }
 
+    override fun getWordCollectionById(collectionId: Long?): Flow<WordCollectionEntity?> {
+        return wordCollectionsDao.getWordCollectionById(collectionId)
+    }
+
     override suspend fun createNewWordCollection(wordCollection: WordCollection) {
         val wordCollectionEntity = WordCollectionEntity.createFromCollection(wordCollection)
 

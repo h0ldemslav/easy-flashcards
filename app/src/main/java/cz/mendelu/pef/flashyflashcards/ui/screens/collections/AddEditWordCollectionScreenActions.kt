@@ -5,5 +5,5 @@ import cz.mendelu.pef.flashyflashcards.model.WordCollection
 interface AddEditWordCollectionScreenActions {
 
     fun getAllLanguages(): Map<String, String>
-    fun createOrUpdateWordCollection(wordCollection: WordCollection?)
+    fun setWordCollection(wordCollection: WordCollection?)
 }

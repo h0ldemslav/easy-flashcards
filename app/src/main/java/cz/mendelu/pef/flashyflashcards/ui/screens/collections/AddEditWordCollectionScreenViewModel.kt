@@ -73,7 +73,7 @@ class AddEditWordCollectionScreenViewModel @Inject constructor(
         return translator.getListOfFullLanguageNames()
     }
 
-    override fun createOrUpdateWordCollection(wordCollection: WordCollection?) {
+    override fun setWordCollection(wordCollection: WordCollection?) {
         val errors = uiState.errors
 
         val data = WordCollection(
@@ -87,5 +87,27 @@ class AddEditWordCollectionScreenViewModel @Inject constructor(
             data = data,
             errors = errors
         )
+    }
+
+    fun getWordCollectionById(id: Long?) {
+        uiState = UiState(
+            loading = true
+        )
+
+        launch {
+            wordCollectionsRepository.getWordCollectionById(id).collect { entity ->
+                if (entity != null) {
+                    val wordCollection = WordCollection.createFromEntity(entity)
+                    setWordCollection(wordCollection)
+                } else {
+                    uiState = UiState(
+                        errors = ScreenErrors(
+                            imageRes = R.drawable.undraw_warning,
+                            messageRes = R.string.unknown_error
+                        )
+                    )
+                }
+            }
+        }
     }
 }

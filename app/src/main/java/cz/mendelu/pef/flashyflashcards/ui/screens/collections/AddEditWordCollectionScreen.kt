@@ -32,6 +32,7 @@ import cz.mendelu.pef.flashyflashcards.ui.elements.BasicAlertDialog
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicScaffold
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicTextFieldElement
 import cz.mendelu.pef.flashyflashcards.ui.elements.DropDownElement
+import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
 import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 
@@ -39,22 +40,24 @@ import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 @Destination
 @Composable
 fun AddEditWordCollectionScreen(
-    wordCollection: WordCollection?,
     navController: NavController,
-    viewModel: AddEditWordCollectionScreenViewModel = hiltViewModel()
+    viewModel: AddEditWordCollectionScreenViewModel = hiltViewModel(),
+    wordCollectionId: Long?,
 ) {
     var isRemoveCollectionDialogOpened by remember {
         mutableStateOf(false)
     }
 
     LaunchedEffect(Unit) {
-        if (viewModel.uiState.data == null) {
-            viewModel.createOrUpdateWordCollection(wordCollection)
+        if (wordCollectionId != null) {
+            viewModel.getWordCollectionById(wordCollectionId)
+        } else {
+            viewModel.setWordCollection(null)
         }
     }
 
     BasicScaffold(
-        topAppBarTitle = if (wordCollection != null)
+        topAppBarTitle = if (wordCollectionId != null)
             stringResource(id = R.string.edit_collection)
         else
             stringResource(id = R.string.new_collection),
@@ -63,7 +66,7 @@ fun AddEditWordCollectionScreen(
         },
         onBackClick = { navController.popBackStack() },
         actions = {
-            if (wordCollection != null) {
+            if (wordCollectionId != null) {
                 IconButton(onClick = {
                     isRemoveCollectionDialogOpened = true
                 }) {
@@ -132,7 +135,7 @@ fun AddEditWordCollectionScreenContent(
                 value = uiState.data!!.name,
                 onValueChange = {
                     uiState.data!!.name = it
-                    actions.createOrUpdateWordCollection(uiState.data!!)
+                    actions.setWordCollection(uiState.data!!)
                 },
                 label = stringResource(id = R.string.name_label),
                 errorMessage = if (uiState.errors?.messageRes == R.string.word_collections_collection_error)
@@ -150,7 +153,7 @@ fun AddEditWordCollectionScreenContent(
                 onDismissRequest = { isSourceLanguageExpanded = false },
                 onDropDownMenuItemClick = {
                     uiState.data!!.sourceLanguage = it
-                    actions.createOrUpdateWordCollection(uiState.data!!)
+                    actions.setWordCollection(uiState.data!!)
 
                     isSourceLanguageExpanded = false
                 }
@@ -170,7 +173,7 @@ fun AddEditWordCollectionScreenContent(
                 onDismissRequest = { isTargetLanguageExpanded = false },
                 onDropDownMenuItemClick = {
                     uiState.data!!.targetLanguage = it
-                    actions.createOrUpdateWordCollection(uiState.data!!)
+                    actions.setWordCollection(uiState.data!!)
 
                     isTargetLanguageExpanded = false
                 }
@@ -184,6 +187,19 @@ fun AddEditWordCollectionScreenContent(
             ) {
                 Text(text = stringResource(id = R.string.save_label))
             }
+        }
+    } else if (uiState.errors != null) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            PlaceholderElement(
+                imageRes = uiState.errors!!.imageRes,
+                textRes = uiState.errors!!.messageRes
+            )
         }
     }
 }

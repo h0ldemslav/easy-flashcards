@@ -47,7 +47,9 @@ fun WordCollectionsScreen(
         showLoading = viewModel.uiState.loading,
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(AddEditWordCollectionScreenDestination(wordCollection = null))
+                navController.navigate(
+                    AddEditWordCollectionScreenDestination(wordCollectionId = null)
+                )
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -60,10 +62,12 @@ fun WordCollectionsScreen(
             paddingValues = paddingValues,
             uiState = viewModel.uiState,
             onIconClick = {
-                navController.navigate(AddEditWordCollectionScreenDestination(wordCollection = it))
+                navController.navigate(
+                    AddEditWordCollectionScreenDestination(wordCollectionId = it.id)
+                )
             },
             onRowClick = {
-                navController.navigate(WordsScreenDestination(wordCollection = it))
+                navController.navigate(WordsScreenDestination(collectionId = it.id))
             }
         )
     }

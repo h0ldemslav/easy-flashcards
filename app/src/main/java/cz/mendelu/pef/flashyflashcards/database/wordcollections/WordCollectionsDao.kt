@@ -14,6 +14,9 @@ interface WordCollectionsDao {
     @Query("SELECT * FROM word_collections")
     fun getAllWordCollections(): Flow<List<WordCollectionEntity>>
 
+    @Query("SELECT * FROM word_collections WHERE id=:collectionId")
+    fun getWordCollectionById(collectionId: Long?): Flow<WordCollectionEntity?>
+
     @Insert
     suspend fun createNewWordCollection(collectionEntity: WordCollectionEntity)
 

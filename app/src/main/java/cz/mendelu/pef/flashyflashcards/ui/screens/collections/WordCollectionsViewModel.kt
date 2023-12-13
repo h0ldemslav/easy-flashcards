@@ -38,11 +38,4 @@ class WordCollectionsViewModel @Inject constructor(
             }
         }
     }
-
-    fun createNewWordCollection(src: String, trg: String) {
-        val col = WordCollection(null, "New Collection", src, trg)
-        launch {
-            wordCollectionsRepository.createNewWordCollection(col)
-        }
-    }
 }

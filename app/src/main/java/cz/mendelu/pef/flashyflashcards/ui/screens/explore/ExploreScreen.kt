@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -108,7 +109,8 @@ fun ExploreScreenContent(
         mutableStateOf(false)
     }
 
-    val controller = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val maxTextFieldCharacters = 256
     val items = BusinessCategory.values().toList().map { it._name }
 
@@ -145,7 +147,11 @@ fun ExploreScreenContent(
             errorMessage = if (screenData.errorMessage == R.string.explore_screen_city_input_error)
                 stringResource(id = screenData.errorMessage!!)
             else
-                null
+                null,
+            onDone = {
+                keyboardController?.hide()
+                focusManager.clearFocus()
+            }
         )
 
         DropDownElement(
@@ -162,8 +168,10 @@ fun ExploreScreenContent(
         }
 
         Button(
+            enabled = !uiState.loading,
             onClick = {
-                controller?.hide()
+                keyboardController?.hide()
+                focusManager.clearFocus()
                 actions.searchPlaces()
             },
             modifier = Modifier

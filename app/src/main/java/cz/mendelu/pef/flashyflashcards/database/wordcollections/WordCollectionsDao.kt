@@ -4,8 +4,10 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import cz.mendelu.pef.flashyflashcards.model.WordCollectionEntity
+import cz.mendelu.pef.flashyflashcards.model.WordCollectionEntityWithWordEntities
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,6 +18,10 @@ interface WordCollectionsDao {
 
     @Query("SELECT * FROM word_collections WHERE id=:collectionId")
     fun getWordCollectionById(collectionId: Long?): Flow<WordCollectionEntity?>
+
+    @Transaction
+    @Query("SELECT * FROM word_collections WHERE id=:collectionId")
+    fun getWordCollectionAndWordsById(collectionId: Long?): Flow<WordCollectionEntityWithWordEntities?>
 
     @Insert
     suspend fun createNewWordCollection(collectionEntity: WordCollectionEntity)

@@ -67,7 +67,12 @@ fun WordCollectionsScreen(
                 )
             },
             onRowClick = {
-                navController.navigate(WordsScreenDestination(collectionId = it.id))
+                navController.navigate(
+                    WordsScreenDestination(
+                        collectionId = it.id,
+                        collectionName = it.name
+                    )
+                )
             }
         )
     }

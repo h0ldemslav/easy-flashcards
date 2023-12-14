@@ -39,6 +39,8 @@ fun ListRow(
         headline
     }
 
+    val columnStartPadding = if (showAvatar) basicMargin() else 0.dp
+
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = halfMargin())
@@ -65,7 +67,7 @@ fun ListRow(
         Column(
             modifier = Modifier
                 .weight(2f)
-                .padding(start = basicMargin())
+                .padding(start = columnStartPadding)
         ) {
             Text(
                 text = _headline,

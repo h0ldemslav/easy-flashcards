@@ -7,4 +7,6 @@ interface WordsRepository {
 
     fun getAllWords(): Flow<List<WordEntity>>
     suspend fun addNewWord(wordEntity: WordEntity)
+    suspend fun updateWord(wordEntity: WordEntity)
+    suspend fun deleteWord(wordEntity: WordEntity)
 }

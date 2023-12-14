@@ -1,7 +1,5 @@
 package cz.mendelu.pef.flashyflashcards.model
 
-import java.io.Serializable
-
 data class WordCollection(
     var id: Long? = null,
     var name: String,

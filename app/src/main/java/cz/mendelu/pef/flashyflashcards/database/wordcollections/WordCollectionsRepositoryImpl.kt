@@ -2,6 +2,7 @@ package cz.mendelu.pef.flashyflashcards.database.wordcollections
 
 import cz.mendelu.pef.flashyflashcards.model.WordCollection
 import cz.mendelu.pef.flashyflashcards.model.WordCollectionEntity
+import cz.mendelu.pef.flashyflashcards.model.WordCollectionEntityWithWordEntities
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -14,6 +15,10 @@ class WordCollectionsRepositoryImpl @Inject constructor(
 
     override fun getWordCollectionById(collectionId: Long?): Flow<WordCollectionEntity?> {
         return wordCollectionsDao.getWordCollectionById(collectionId)
+    }
+
+    override fun getWordCollectionAndWordsById(collectionId: Long?): Flow<WordCollectionEntityWithWordEntities?> {
+        return wordCollectionsDao.getWordCollectionAndWordsById(collectionId)
     }
 
     override suspend fun createNewWordCollection(wordCollection: WordCollection) {

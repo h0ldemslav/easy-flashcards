@@ -56,6 +56,10 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="bookmarks_search_field_hint">Type city, category or place name to filter out</string>
     <string name="translation_label">Translation</string>
+    <string name="translate_label">Translate</string>
     <string name="new_word">New word</string>
+    <string name="edit_word">Edit word</string>
     <string name="unknown_error">Unknown error, please, send us a feedback.</string>
+    <string name="words_name_error">Name must not be empty</string>
+    <string name="words_translation_error">Translation must not be empty</string>
 </resources>

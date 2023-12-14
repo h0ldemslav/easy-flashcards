@@ -14,4 +14,12 @@ class WordsRepositoryImpl @Inject constructor(
     override suspend fun addNewWord(wordEntity: WordEntity) {
         wordsDao.addNewWord(wordEntity)
     }
+
+    override suspend fun updateWord(wordEntity: WordEntity) {
+        wordsDao.updateWord(wordEntity)
+    }
+
+    override suspend fun deleteWord(wordEntity: WordEntity) {
+        wordsDao.deleteWord(wordEntity)
+    }
 }

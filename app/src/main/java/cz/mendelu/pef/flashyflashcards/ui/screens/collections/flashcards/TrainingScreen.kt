@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import cz.mendelu.pef.flashyflashcards.model.Word
 import cz.mendelu.pef.flashyflashcards.navigation.graphs.CollectionsNavGraph
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicScaffold
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicTextFieldElement
+import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
 import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.mediumMargin
@@ -74,7 +76,6 @@ fun TrainingScreenContent(
     uiState: UiState<Word, ScreenErrors>,
     actions: TrainingScreenActions
 ) {
-    val boxHeight = 156.dp
     var boxText by remember {
         mutableStateOf("")
     }
@@ -82,57 +83,37 @@ fun TrainingScreenContent(
         mutableStateOf("")
     }
 
-    if (uiState.data != null) {
-        if (boxText.isEmpty()) {
-            boxText = uiState.data!!.name
-        }
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(mediumMargin()),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues)
-                .padding(basicMargin())
-                .padding(top = basicMargin())
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(boxHeight)
-                    .clip(RoundedCornerShape(basicMargin()))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .clickable {
-                        boxText = if (boxText == uiState.data!!.name) {
-                            uiState.data!!.translation
-                        } else {
-                            uiState.data!!.name
-                        }
-                    }
-            ) {
-                Text(
-                    text = boxText,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(mediumMargin()),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(paddingValues)
+            .padding(basicMargin())
+            .padding(top = basicMargin())
+    ) {
+        if (uiState.data != null) {
+            if (boxText.isEmpty()) {
+                boxText = uiState.data!!.name
             }
 
-            Spacer(modifier = Modifier.height(smallMargin()))
+            Flashcard(text = boxText) {
+                boxText = if (boxText == uiState.data!!.name) {
+                    uiState.data!!.translation
+                } else {
+                    uiState.data!!.name
+                }
+            }
 
-            BasicTextFieldElement(
-                value = answer,
+            Answer(
+                answer = answer,
                 onValueChange = {
                     answer = it
                 },
-                label = stringResource(id = R.string.answer_label),
-                supportingText = stringResource(id = R.string.flashcard_hint),
-                errorMessage =  if (uiState.errors != null)
-                    stringResource(id = uiState.errors!!.messageRes)
-                else
-                    null
+                errors = uiState.errors
             )
+
+            Spacer(modifier = Modifier.height(smallMargin()))
 
             ElevatedButton(onClick = {
                 if (actions.isAnswerCorrect(answer)) {
@@ -143,6 +124,72 @@ fun TrainingScreenContent(
             }) {
                 Text(text = stringResource(id = R.string.next_label))
             }
+        } else if (uiState.errors == null) {
+            Text(
+                color = MaterialTheme.colorScheme.primary,
+                text = stringResource(id = R.string.training_finished).uppercase(),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Button(onClick = {
+                actions.resetWordToTheFirst()
+            }) {
+                Text(text = stringResource(id = R.string.repeat_label))
+            }
+        } else {
+            PlaceholderElement(
+                imageRes = null,
+                textRes = uiState.errors!!.messageRes
+            )
         }
     }
+}
+
+@Composable
+fun Flashcard(
+    text: String,
+    height: Int = 156,
+    onCardClick: () -> Unit
+) {
+    val modifiedText = if (text.length > 48) text.slice(0..47) else text
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height.dp)
+            .clip(RoundedCornerShape(basicMargin()))
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .clickable {
+                onCardClick()
+            }
+    ) {
+        Text(
+            text = modifiedText,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+@Composable
+fun Answer(
+    answer: String,
+    onValueChange: (String) -> Unit,
+    errors: ScreenErrors?
+) {
+    BasicTextFieldElement(
+        value = answer,
+        onValueChange = {
+            onValueChange(it)
+        },
+        label = stringResource(id = R.string.answer_label),
+        supportingText = stringResource(id = R.string.flashcard_hint),
+        errorMessage = if (errors != null)
+            stringResource(id = errors.messageRes)
+        else
+            null
+    )
 }

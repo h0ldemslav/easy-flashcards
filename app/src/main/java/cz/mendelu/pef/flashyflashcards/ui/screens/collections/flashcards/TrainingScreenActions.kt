@@ -4,4 +4,5 @@ interface TrainingScreenActions {
 
     fun isAnswerCorrect(answer: String): Boolean
     fun setNextWord()
+    fun resetWordToTheFirst()
 }

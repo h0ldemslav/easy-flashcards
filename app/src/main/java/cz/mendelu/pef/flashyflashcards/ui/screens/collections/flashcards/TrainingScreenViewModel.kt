@@ -87,6 +87,16 @@ class TrainingScreenViewModel @Inject constructor(
             uiState = UiState(
                 data = fetchedListOfWords[currentWordIndex]
             )
+        } else {
+            uiState = UiState()
         }
+    }
+
+    override fun resetWordToTheFirst() {
+        currentWordIndex = 0
+
+        uiState = UiState(
+            data = fetchedListOfWords.firstOrNull()
+        )
     }
 }

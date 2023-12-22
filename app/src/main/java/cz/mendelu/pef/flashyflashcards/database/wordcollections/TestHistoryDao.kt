@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TestHistoryDao {
 
-    @Query("SELECT id, dateOfCompletion FROM test_history WHERE wordCollectionId=:id")
+    @Query("SELECT * FROM test_history WHERE wordCollectionId=:id")
     fun getAllTestHistoryByCollectionId(id: Long?): Flow<List<TestHistoryEntity>>
 
     @Insert

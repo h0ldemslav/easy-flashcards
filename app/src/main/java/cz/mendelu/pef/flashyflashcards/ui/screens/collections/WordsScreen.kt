@@ -13,6 +13,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,6 +45,8 @@ fun WordsScreen(
     collectionId: Long?,
     collectionName: String
 ) {
+    val testAnswerLength by viewModel.getTestAnswerLength().collectAsState(initial = 0L)
+
     LaunchedEffect(Unit) {
         if (viewModel.uiState.data == null) {
             viewModel.getAllWordCollectionWords(collectionId)
@@ -113,7 +117,7 @@ fun WordsScreen(
                 navController.navigate(
                     FlashcardPracticeScreenDestination(
                         collectionId = collectionId,
-                        flashcardPracticeType = FlashcardPracticeType.Test
+                        flashcardPracticeType = FlashcardPracticeType.Test(testAnswerLength)
                     )
                 )
             }) {

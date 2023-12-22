@@ -11,13 +11,15 @@ import kotlinx.coroutines.delay
 @Composable
 fun BasicTimer(
     modifier: Modifier = Modifier,
-    totalTimeInMillis: Long,
     textAlign: TextAlign = TextAlign.End,
+    totalTimeInMillis: Long,
+    refresh: Boolean,
+    delayInMillis: Long = 100L,
     onTimeChange: (Long) -> Unit
 ) {
-    LaunchedEffect(totalTimeInMillis) {
-        if (totalTimeInMillis > 0) {
-            delay(100L)
+    LaunchedEffect(totalTimeInMillis, refresh) {
+        if (totalTimeInMillis > 0 || refresh) {
+            delay(delayInMillis)
             onTimeChange(totalTimeInMillis)
         }
     }

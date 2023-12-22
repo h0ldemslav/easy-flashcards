@@ -5,21 +5,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cz.mendelu.pef.flashyflashcards.architecture.BaseViewModel
 import cz.mendelu.pef.flashyflashcards.database.wordcollections.WordCollectionsRepository
+import cz.mendelu.pef.flashyflashcards.datastore.DataStoreRepository
 import cz.mendelu.pef.flashyflashcards.mlkit.MLKitTranslateManager
 import cz.mendelu.pef.flashyflashcards.model.UiState
 import cz.mendelu.pef.flashyflashcards.model.Word
 import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WordsScreenViewModel @Inject constructor(
     private val wordCollectionsRepository: WordCollectionsRepository,
-    private val mlKitTranslateManager: MLKitTranslateManager
+    private val mlKitTranslateManager: MLKitTranslateManager,
+    private val dataStoreRepository: DataStoreRepository
 ) : BaseViewModel() {
 
     var uiState by mutableStateOf(UiState<List<Word>, ScreenErrors>(loading = true))
+
+    init {
+        getTestAnswerLength()
+    }
 
     fun getAllWordCollectionWords(wordCollectionId: Long?) {
         launch {
@@ -44,5 +51,9 @@ class WordsScreenViewModel @Inject constructor(
     fun closeAndResetTranslator() {
         mlKitTranslateManager.closeTranslator()
         mlKitTranslateManager.resetTranslator()
+    }
+
+    fun getTestAnswerLength(): Flow<Long> {
+        return dataStoreRepository.getTestAnswerLength()
     }
 }

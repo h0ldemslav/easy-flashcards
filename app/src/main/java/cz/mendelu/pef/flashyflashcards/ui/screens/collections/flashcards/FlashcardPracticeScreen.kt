@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -22,11 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import cz.mendelu.pef.flashyflashcards.R
 import cz.mendelu.pef.flashyflashcards.model.FlashcardPracticeType
+import cz.mendelu.pef.flashyflashcards.model.TestHistory
 import cz.mendelu.pef.flashyflashcards.model.UiState
 import cz.mendelu.pef.flashyflashcards.navigation.graphs.CollectionsNavGraph
 import cz.mendelu.pef.flashyflashcards.ui.elements.BasicScaffold
@@ -52,14 +55,20 @@ fun FlashcardPracticeScreen(
         if (viewModel.uiState.data == null) {
             viewModel.getAllCollectionWords(collectionId)
         }
+
+        if (flashcardPracticeType is FlashcardPracticeType.Training) {
+            viewModel.turnOffTestHistory()
+        }
+    }
+
+    val timer = if (flashcardPracticeType is FlashcardPracticeType.Test) {
+        flashcardPracticeType.initialTimer
+    } else {
+        null
     }
 
     BasicScaffold(
-        topAppBarTitle = if (flashcardPracticeType == FlashcardPracticeType.Test)
-            stringResource(id = R.string.test_label)
-        else
-            stringResource(id = R.string.training_label)
-        ,
+        topAppBarTitle = stringResource(id = flashcardPracticeType.name),
         showLoading = viewModel.uiState.loading,
         onBackClick = { navController.popBackStack() }
     ) { paddingValues ->
@@ -67,7 +76,7 @@ fun FlashcardPracticeScreen(
             paddingValues = paddingValues,
             uiState = viewModel.uiState,
             actions = viewModel,
-            flashcardPracticeType = flashcardPracticeType
+            initialTestTimer = timer
         )
     }
 }
@@ -77,16 +86,15 @@ fun FlashcardPracticeScreenContent(
     paddingValues: PaddingValues,
     uiState: UiState<FlashcardPracticeScreenData, ScreenErrors>,
     actions: FlashcardPracticeScreenActions,
-    flashcardPracticeType: FlashcardPracticeType
+    initialTestTimer: Long?
 ) {
-    var timer by remember {
-        mutableStateOf(15000L)
+    var testTimer by remember {
+        mutableStateOf(initialTestTimer ?: 0L)
     }
-
-    val finishedText = if (flashcardPracticeType == FlashcardPracticeType.Test) {
-        stringResource(id = R.string.test_finished)
-    } else {
-        stringResource(id = R.string.training_finished)
+    // This is needed! Without this variable, testTimer may be not
+    // reset to initial value (very rarely, but could happen)
+    var testTimerRefresh by remember {
+        mutableStateOf(false)
     }
 
     Column(
@@ -101,36 +109,63 @@ fun FlashcardPracticeScreenContent(
         if (uiState.data != null && uiState.data?.finish == false) {
             val answer = uiState.data!!.answer
             val flashcardText = uiState.data!!.flashcardText
-            val currentWordNumber = uiState.data!!.currentWordNumber
-            val totalWordsNumber = uiState.data!!.words.size
 
-            if (flashcardPracticeType == FlashcardPracticeType.Test) {
+            // If initialTestTimer is present, user's taking a collection test
+            if (initialTestTimer != null) {
+                val currentWordNumber = uiState.data!!.currentWordNumber + 1
+                val totalWordsNumber = uiState.data!!.words.size
+
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "${currentWordNumber}/${totalWordsNumber}",
+                        modifier = Modifier.weight(0.5f),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+
+                    BasicTimer(
+                        totalTimeInMillis = testTimer,
+                        refresh = testTimerRefresh,
+                        modifier = Modifier.weight(0.5f)
+                    ) {
+                        if (!testTimerRefresh) {
+                            testTimer = it - 100L
+                        } else {
+                            testTimerRefresh = false
+                        }
+                    }
+                }
+
                 Practice(
-                    uiState = null,
                     flashcardText = flashcardText,
                     onFlashcardClick = null,
                     answer = answer,
+                    answerFieldEnabled = testTimer > 0,
                     answerSupportingText = null,
+                    answerErrorMessage = null,
                     onAnswerChange = { actions.setAnswer(it) },
-                    timer = timer,
-                    onTimerUpdate = { timer = it - 100L },
-                    wordCount = "${currentWordNumber}/${totalWordsNumber}",
                     actionButtonLabel = stringResource(id = R.string.next_label)
                 ) {
+                    val timeTaken = initialTestTimer - testTimer
+
+                    testTimer = initialTestTimer
+                    testTimerRefresh = true
+
                     actions.setNextWord()
-                    // Reset timer for new card (word)
-                    timer = 15000L
+                    actions.updateTimeTakenInTestHistory(timeTaken)
                 }
             } else {
                 Practice(
-                    uiState = uiState,
                     flashcardText = flashcardText,
                     onFlashcardClick = { actions.setFlashcardText() },
                     answer = answer,
                     answerSupportingText = stringResource(id = R.string.flashcard_hint),
+                    answerErrorMessage = if (uiState.errors != null)
+                        stringResource(id = uiState.errors!!.messageRes)
+                    else
+                        null,
                     onAnswerChange = { actions.setAnswer(it) },
-                    timer = null,
-                    onTimerUpdate = null,
                     actionButtonLabel = stringResource(id = R.string.next_label)
                 ) {
                     // User should answer correctly
@@ -140,18 +175,17 @@ fun FlashcardPracticeScreenContent(
                 }
             }
         } else if (uiState.errors == null) {
-            Text(
-                color = MaterialTheme.colorScheme.primary,
-                text = finishedText.uppercase(),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            val testHistory = actions.getTestHistory()
 
-            Button(onClick = {
-                actions.resetFlashcard()
-            }) {
-                Text(text = stringResource(id = R.string.repeat_label))
-            }
+            PracticeResult(
+                title = if (testHistory != null)
+                    stringResource(id = R.string.test_finished)
+                else
+                    stringResource(id = R.string.training_finished)
+                ,
+                actions = actions,
+                testHistory = testHistory
+            )
         } else {
             PlaceholderElement(
                 imageRes = null,
@@ -163,41 +197,16 @@ fun FlashcardPracticeScreenContent(
 
 @Composable
 fun Practice(
-    uiState: UiState<FlashcardPracticeScreenData, ScreenErrors>?,
     flashcardText: String,
     onFlashcardClick: (() -> Unit)?,
     answer: String,
+    answerFieldEnabled: Boolean = true,
     answerSupportingText: String?,
+    answerErrorMessage: String?,
     onAnswerChange: (String) -> Unit,
-    timer: Long?,
-    onTimerUpdate: ((Long) -> Unit)?,
-    wordCount: String? = null,
     actionButtonLabel: String,
     onActionButtonClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        if (wordCount != null) {
-            Text(
-                text = wordCount,
-                modifier = Modifier.weight(0.5f),
-                style = MaterialTheme.typography.titleMedium,
-            )
-        }
-
-        if (timer != null) {
-            BasicTimer(
-                totalTimeInMillis = timer,
-                modifier = Modifier.weight(0.5f)
-            ) {
-                if (onTimerUpdate != null) {
-                    onTimerUpdate(it)
-                }
-            }
-        }
-    }
-
     Flashcard(text = flashcardText) {
         if (onFlashcardClick != null) {
             onFlashcardClick()
@@ -211,16 +220,80 @@ fun Practice(
         onValueChange = onAnswerChange,
         label = stringResource(id = R.string.answer_label),
         supportingText = answerSupportingText,
-        enabled = if (timer != null && timer <= 0) false else true,
-        errorMessage = if (uiState?.errors != null)
-            stringResource(id = uiState.errors!!.messageRes)
-        else
-            null
+        enabled = answerFieldEnabled,
+        errorMessage = answerErrorMessage
     )
 
     ElevatedButton(onClick = {
         onActionButtonClick()
     }) {
         Text(text = actionButtonLabel)
+    }
+}
+
+@Composable
+fun PracticeResult(
+    title: String,
+    actions: FlashcardPracticeScreenActions,
+    testHistory: TestHistory?
+) {
+    Text(
+        color = MaterialTheme.colorScheme.primary,
+        text = title.uppercase(),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(basicMargin()),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = mediumMargin())
+    ) {
+        Button(
+            onClick = {
+                actions.resetFlashcard()
+            },
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(text = stringResource(id = R.string.repeat_label))
+        }
+
+        if (testHistory != null) {
+            Button(
+                onClick = {
+                    actions.saveTestHistory()
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(text = stringResource(id = R.string.save_test_summary_label))
+            }
+        }
+    }
+
+    if (testHistory != null) {
+        TestSummary(testHistory = testHistory)
+    }
+}
+
+@Composable
+fun TestSummary(
+    testHistory: TestHistory
+) {
+    Column {
+        Text(text = "Time taken ${testHistory.timeTaken / 1000L}")
+
+        LazyColumn(modifier = Modifier.height(128.dp)) {
+            testHistory.answers.forEach { answer ->
+                item {
+                    Column {
+                        Text(text = "Word ${answer.word.name}")
+                        Text(text = "Word ${answer.word.translation}")
+                        Text(text = "Word ${answer.answer}")
+                    }
+                }
+            }
+        }
     }
 }

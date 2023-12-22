@@ -3,10 +3,10 @@ package cz.mendelu.pef.flashyflashcards.model
 import cz.mendelu.pef.flashyflashcards.model.entities.TestHistoryEntity
 
 data class TestHistory(
-    var id: Long?,
-    var answers: List<FlashcardAnswer>,
-    var dateOfCompletion: Long,
-    var timeTaken: Long,
+    var id: Long? = null,
+    var answers: MutableList<FlashcardAnswer> = mutableListOf(),
+    var dateOfCompletion: Long = 0L,
+    var timeTaken: Long = 0L,
     var wordCollectionId: Long?
 ) {
     companion object {
@@ -14,7 +14,7 @@ data class TestHistory(
         fun createFromTestHistoryEntity(testHistoryEntity: TestHistoryEntity): TestHistory {
             return TestHistory(
                 id = testHistoryEntity.id,
-                answers = testHistoryEntity.answers,
+                answers = testHistoryEntity.answers.toMutableList(),
                 dateOfCompletion = testHistoryEntity.dateOfCompletion,
                 timeTaken = testHistoryEntity.timeTaken,
                 wordCollectionId = testHistoryEntity.wordCollectionId

@@ -33,7 +33,7 @@ data class TestHistoryEntity(
         fun createFromTestHistory(testHistory: TestHistory): TestHistoryEntity {
             return TestHistoryEntity(
                 id = testHistory.id,
-                answers = testHistory.answers,
+                answers = testHistory.answers.toList(),
                 dateOfCompletion = testHistory.dateOfCompletion,
                 timeTaken = testHistory.timeTaken,
                 wordCollectionId = testHistory.wordCollectionId

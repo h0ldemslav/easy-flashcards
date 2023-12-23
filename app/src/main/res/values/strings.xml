@@ -71,6 +71,8 @@
     <string name="flashcard_hint">If you can\'t remember, tap on a card for a hint</string>
     <string name="incorrect_answer">Wrong, tap on a card for a hint</string>
     <string name="test_label">Test</string>
+    <string name="test_history_label">Test history</string>
+    <string name="more_label">More</string>
     <string name="terminate_test">Terminate test</string>
     <string name="training_finished">Training finished!</string>
     <string name="test_finished">Test finished!</string>

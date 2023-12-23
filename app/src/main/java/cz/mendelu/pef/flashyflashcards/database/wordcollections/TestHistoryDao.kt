@@ -13,6 +13,9 @@ interface TestHistoryDao {
     @Query("SELECT * FROM test_history WHERE wordCollectionId=:id")
     fun getAllTestHistoryByCollectionId(id: Long?): Flow<List<TestHistoryEntity>>
 
+    @Query("SELECT * FROM test_history WHERE id=:testHistoryId")
+    suspend fun getSingleTestHistoryById(testHistoryId: Long?): TestHistoryEntity?
+
     @Insert
     suspend fun createNewTestHistory(testHistoryEntity: TestHistoryEntity)
 

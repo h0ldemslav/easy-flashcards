@@ -11,6 +11,10 @@ class TestHistoryRepositoryImpl @Inject constructor(
         return testHistoryDao.getAllTestHistoryByCollectionId(id)
     }
 
+    override suspend fun getSingleTestHistoryById(testHistoryId: Long?): TestHistoryEntity? {
+        return testHistoryDao.getSingleTestHistoryById(testHistoryId)
+    }
+
     override suspend fun createNewTestHistory(testHistoryEntity: TestHistoryEntity) {
         testHistoryDao.createNewTestHistory(testHistoryEntity)
     }

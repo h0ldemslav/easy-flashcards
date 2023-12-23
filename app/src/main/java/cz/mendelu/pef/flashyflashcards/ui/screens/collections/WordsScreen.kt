@@ -44,6 +44,7 @@ import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.AddEditWordCollectionScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.AddEditWordScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.FlashcardPracticeScreenDestination
+import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.TestHistoryScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 
 @CollectionsNavGraph
@@ -161,7 +162,7 @@ fun WordsScreen(
                         },
                         onClick = {
                             popupMenuExpanded = false
-                            
+
                             navController.navigate(
                                 FlashcardPracticeScreenDestination(
                                     collectionId = collectionId,
@@ -178,7 +179,9 @@ fun WordsScreen(
                             Text(text = stringResource(id = R.string.test_history_label))
                         },
                         onClick = {
-
+                            navController.navigate(
+                                TestHistoryScreenDestination(collectionId = collectionId)
+                            )
                         }
                     )
                 }

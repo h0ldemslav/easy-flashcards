@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BusinessesDao {
 
-    @Query("SELECT * FROM businesses WHERE remoteId=:businessRemoteId")
-    fun getBusinessByRemoteId(businessRemoteId: String): Flow<BusinessEntity?>
-
     @Query("SELECT * FROM businesses")
     fun getAllBusinesses(): Flow<List<BusinessEntity>>
 
+    @Query("SELECT * FROM businesses WHERE remoteId=:businessRemoteId")
+    suspend fun getBusinessByRemoteId(businessRemoteId: String): BusinessEntity?
+
     @Insert
-    suspend fun addNewBusiness(businessEntity: BusinessEntity)
+    suspend fun addNewBusiness(businessEntity: BusinessEntity): Long?
 
     @Delete
     suspend fun deleteBusiness(businessEntity: BusinessEntity)

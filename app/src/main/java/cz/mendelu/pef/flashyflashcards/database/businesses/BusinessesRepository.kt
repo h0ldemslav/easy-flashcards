@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BusinessesRepository {
 
-    fun getBusinessByRemoteId(businessRemoteId: String): Flow<BusinessEntity?>
     fun getAllBusinesses(): Flow<List<BusinessEntity>>
-    suspend fun addNewBusiness(businessEntity: BusinessEntity)
+    suspend fun getBusinessByRemoteId(businessRemoteId: String): BusinessEntity?
+    suspend fun addNewBusiness(businessEntity: BusinessEntity): Long?
     suspend fun deleteBusiness(businessEntity: BusinessEntity)
 }

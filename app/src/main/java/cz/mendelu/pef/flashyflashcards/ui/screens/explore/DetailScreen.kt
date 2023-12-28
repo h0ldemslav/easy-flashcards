@@ -101,11 +101,11 @@ fun DetailScreen(
         actions = {
             if (viewModel.uiState.data?.whenAdded != null) {
                 IconButton(onClick = {
+                    viewModel.deleteBusiness()
+
                     if (dataSourceType is DataSourceType.Local) {
                         navController.popBackStack()
                     }
-
-                    viewModel.deleteBusiness()
 
                     Toast.makeText(
                         context,

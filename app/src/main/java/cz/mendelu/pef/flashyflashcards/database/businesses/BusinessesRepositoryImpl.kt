@@ -7,16 +7,16 @@ import javax.inject.Inject
 class BusinessesRepositoryImpl @Inject constructor(
     private val businessesDao: BusinessesDao
 ) : BusinessesRepository {
-    override fun getBusinessByRemoteId(businessRemoteId: String): Flow<BusinessEntity?> {
-        return businessesDao.getBusinessByRemoteId(businessRemoteId)
-    }
-
     override fun getAllBusinesses(): Flow<List<BusinessEntity>> {
         return businessesDao.getAllBusinesses()
     }
 
-    override suspend fun addNewBusiness(businessEntity: BusinessEntity) {
-        businessesDao.addNewBusiness(businessEntity)
+    override suspend fun getBusinessByRemoteId(businessRemoteId: String): BusinessEntity? {
+        return businessesDao.getBusinessByRemoteId(businessRemoteId)
+    }
+
+    override suspend fun addNewBusiness(businessEntity: BusinessEntity): Long? {
+        return businessesDao.addNewBusiness(businessEntity)
     }
 
     override suspend fun deleteBusiness(businessEntity: BusinessEntity) {

@@ -5,6 +5,7 @@
 
     <style name="Theme.FlashySplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenIconBackgroundColor">@color/launcher_icon_bg</item>
+        <item name="windowSplashScreenBackground">@color/splash_screen_bg</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/launcher_icon_fg</item>
         <item name="postSplashScreenTheme">@style/Theme.FlashyFlashcards</item>
     </style>

@@ -47,6 +47,7 @@ import cz.mendelu.pef.flashyflashcards.R
 import cz.mendelu.pef.flashyflashcards.model.UiState
 import cz.mendelu.pef.flashyflashcards.extensions.getImageStarsResFromFloat
 import cz.mendelu.pef.flashyflashcards.extensions.isAtBottom
+import cz.mendelu.pef.flashyflashcards.extensions.isDark
 import cz.mendelu.pef.flashyflashcards.model.Business
 import cz.mendelu.pef.flashyflashcards.model.BusinessCategory
 import cz.mendelu.pef.flashyflashcards.model.DataSourceType
@@ -263,7 +264,7 @@ fun BusinessRow(
                     .padding(top = smallMargin())
             ) {
                 val imageRes = business.rating.getImageStarsResFromFloat()
-                val yelpLogo = if (isSystemInDarkTheme())
+                val yelpLogo = if (MaterialTheme.colorScheme.isDark())
                     R.drawable.yelp_logo_dark
                 else
                     R.drawable.yelp_logo_light

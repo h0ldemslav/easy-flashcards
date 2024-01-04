@@ -17,24 +17,24 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreenViewModel: SplashScreenViewModel by viewModels()
+        val mainActivityViewModel: MainActivityViewModel by viewModels()
 
         installSplashScreen().setKeepOnScreenCondition {
-            splashScreenViewModel.isLoading.value
+            mainActivityViewModel.isLoading.value
         }
 
         super.onCreate(savedInstanceState)
 
         setContent {
-            FlashyFlashcardsTheme {
+            FlashyFlashcardsTheme(mainActivityViewModel.isDarkTheme.value) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (!splashScreenViewModel.isLoading.value) {
+                    if (!mainActivityViewModel.isLoading.value) {
                         DestinationsNavHostWrapper(
-                            navGraph = splashScreenViewModel.startNavGraph.value,
+                            navGraph = mainActivityViewModel.startNavGraph.value,
                         )
                     }
                 }

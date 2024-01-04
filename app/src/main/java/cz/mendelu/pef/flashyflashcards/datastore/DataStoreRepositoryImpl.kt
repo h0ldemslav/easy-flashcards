@@ -61,4 +61,12 @@ class DataStoreRepositoryImpl(
             preferences[testAnswerLengthKey] ?: DataStoreConstants.DEFAULT_TEST_ANSWER_LENGTH_VALUE
         }
     }
+
+    override suspend fun setTestAnswerLength(length: Long) {
+        val testAnswerLengthKey = longPreferencesKey(DataStoreConstants.TEST_ANSWER_LENGTH)
+
+        context.dataStore.edit { preferences ->
+            preferences[testAnswerLengthKey] = length
+        }
+    }
 }

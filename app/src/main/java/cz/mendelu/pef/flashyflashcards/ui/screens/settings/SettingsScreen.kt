@@ -111,6 +111,7 @@ fun SettingsScreenContent(
                     appPreferenceValues = actions.getAllAppPreferenceValues(currentPreference!!),
                     onOptionClick = { displayName, displayValue ->
                         actions.updateAppPreference(displayName, displayValue)
+                        currentPreference = null
                     }
                 ) {
                     currentPreference = null

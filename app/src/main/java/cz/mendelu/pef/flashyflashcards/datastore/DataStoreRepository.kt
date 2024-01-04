@@ -7,6 +7,7 @@ interface DataStoreRepository {
 
     fun isOnboardingFinished(): Flow<Boolean>
     fun getTestAnswerLength(): Flow<Long>
+    suspend fun setTestAnswerLength(length: Long)
     suspend fun setOnboardingFinished()
     suspend fun updateAppPreferences(appPreferences: List<AppPreference>)
     suspend fun getAppPreferences(): Flow<List<AppPreference>>

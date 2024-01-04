@@ -39,7 +39,7 @@ class SettingsScreenViewModel @Inject constructor(
                         displayName = R.string.test_answer_length,
                         displayValue = R.string.test_length_15,
                         name = AppPreferenceConstants.TEST_ANSWER_LENGTH,
-                        value = AppPreferenceConstants.TEST_ANSWER_LENGTH_15_MIN,
+                        value = AppPreferenceConstants.TEST_ANSWER_LENGTH_15_SEC,
                     )
             )
         )
@@ -69,22 +69,22 @@ class SettingsScreenViewModel @Inject constructor(
         AppPreferenceValue(
             appPreferenceName = AppPreferenceConstants.TEST_ANSWER_LENGTH,
             displayName = R.string.test_length_5,
-            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_5_MIN
+            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_5_SEC
         ),
         AppPreferenceValue(
             appPreferenceName = AppPreferenceConstants.TEST_ANSWER_LENGTH,
             displayName = R.string.test_length_10,
-            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_10_MIN
+            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_10_SEC
         ),
         AppPreferenceValue(
             appPreferenceName = AppPreferenceConstants.TEST_ANSWER_LENGTH,
             displayName = R.string.test_length_15,
-            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_15_MIN
+            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_15_SEC
         ),
         AppPreferenceValue(
             appPreferenceName = AppPreferenceConstants.TEST_ANSWER_LENGTH,
             displayName = R.string.test_length_20,
-            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_20_MIN
+            name = AppPreferenceConstants.TEST_ANSWER_LENGTH_20_SEC
         ),
 
     )
@@ -99,6 +99,10 @@ class SettingsScreenViewModel @Inject constructor(
                 if (p.displayName == displayName) {
                     p.displayValue = displayValue
                     p.value = preferencesValues.find { it.displayName == displayValue }?.name ?: ""
+
+                    if (p.name == AppPreferenceConstants.TEST_ANSWER_LENGTH) {
+                        changeTestAnswerLength(p.value)
+                    }
 
                     saveAppPreferences()
 
@@ -133,6 +137,21 @@ class SettingsScreenViewModel @Inject constructor(
                 dataStoreRepository.updateAppPreferences(data)
                 uiState = UiState(data = data)
             }
+        }
+    }
+
+    private fun changeTestAnswerLength(lengthString: String) {
+        val newTestAnswerLength = when (lengthString) {
+            AppPreferenceConstants.TEST_ANSWER_LENGTH_5_SEC -> 5000L
+            AppPreferenceConstants.TEST_ANSWER_LENGTH_10_SEC -> 10000L
+            AppPreferenceConstants.TEST_ANSWER_LENGTH_15_SEC -> 15000L
+            AppPreferenceConstants.TEST_ANSWER_LENGTH_20_SEC -> 20000L
+            // Default
+            else -> 15000L
+        }
+
+        launch {
+            dataStoreRepository.setTestAnswerLength(newTestAnswerLength)
         }
     }
 }

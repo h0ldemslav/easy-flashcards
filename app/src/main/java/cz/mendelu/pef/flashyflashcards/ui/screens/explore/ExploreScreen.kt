@@ -122,7 +122,7 @@ fun ExploreScreenContent(
     val isAtBottom = lazyListState.isAtBottom()
     
     LaunchedEffect(isAtBottom) {
-        if (isAtBottom) {
+        if (isAtBottom && uiState.data?.isNotEmpty() == true) {
             actions.getAnotherPlaces()
         }
     }

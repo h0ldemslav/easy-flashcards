@@ -19,6 +19,10 @@ class BusinessesRepositoryImpl @Inject constructor(
         return businessesDao.addNewBusiness(businessEntity)
     }
 
+    override suspend fun updateBusiness(businessEntity: BusinessEntity) {
+        businessesDao.updateBusiness(businessEntity)
+    }
+
     override suspend fun deleteBusiness(businessEntity: BusinessEntity) {
         businessesDao.deleteBusiness(businessEntity)
     }

@@ -108,4 +108,5 @@
     <string name="cultural_centers_category">Cultural Centers</string>
     <string name="museums_category">Museums</string>
     <string name="art_galleries_category">Art Galleries</string>
+    <string name="failed_to_refresh_business_try_again">Failed to refresh data, try again later</string>
 </resources>

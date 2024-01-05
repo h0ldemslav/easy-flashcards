@@ -97,6 +97,7 @@ fun DetailScreen(
 
     BasicScaffold(
         topAppBarTitle = stringResource(id = R.string.detail),
+        showLoading = viewModel.uiState.loading,
         onBackClick = { navController.popBackStack() },
         actions = {
             if (viewModel.uiState.data?.whenAdded != null) {
@@ -202,13 +203,23 @@ fun DetailScreenContent(
                 }
             }
         }
-    } else if (uiState.errors != null) {
-        PlaceholderElement(
-            imageRes = uiState.errors!!.imageRes,
-            textRes = uiState.errors!!.messageRes,
-            paddingValues = paddingValues,
-            fillMaxSize = true
-        )
+    }
+
+    if (uiState.errors != null) {
+        if (uiState.errors!!.messageRes == R.string.failed_to_refresh_business_try_again) {
+            Toast.makeText(
+                context,
+                stringResource(id = uiState.errors!!.messageRes),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            PlaceholderElement(
+                imageRes = uiState.errors!!.imageRes,
+                textRes = uiState.errors!!.messageRes,
+                paddingValues = paddingValues,
+                fillMaxSize = true
+            )
+        }
     }
 }
 

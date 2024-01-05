@@ -15,6 +15,11 @@ interface YelpAPIRepository : BaseRemoteRepository {
         locale: String
     ): CommunicationResult<YelpResponse>
 
+    suspend fun getBusinessByRemoteID(
+        remoteId: String,
+        locale: String
+    ): CommunicationResult<BusinessDTO>
+
     fun convertBusinessDTOToBusiness(businessDTO: BusinessDTO): Business
     fun cacheBusiness(business: Business)
     fun getCachedBusiness(): Business?

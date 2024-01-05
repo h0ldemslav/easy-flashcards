@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import cz.mendelu.pef.flashyflashcards.model.entities.BusinessEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,6 +19,9 @@ interface BusinessesDao {
 
     @Insert
     suspend fun addNewBusiness(businessEntity: BusinessEntity): Long?
+
+    @Update
+    suspend fun updateBusiness(businessEntity: BusinessEntity)
 
     @Delete
     suspend fun deleteBusiness(businessEntity: BusinessEntity)

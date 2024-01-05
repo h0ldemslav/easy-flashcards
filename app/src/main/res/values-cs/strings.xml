@@ -109,4 +109,5 @@
     <string name="cultural_centers_category">Kulturní střediska</string>
     <string name="museums_category">Muzea</string>
     <string name="art_galleries_category">Galerie</string>
+    <string name="failed_to_refresh_business_try_again">Nepodařilo se obnovit data, zkuste to později</string>
 </resources>

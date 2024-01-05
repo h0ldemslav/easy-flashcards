@@ -8,5 +8,6 @@ interface BusinessesRepository {
     fun getAllBusinesses(): Flow<List<BusinessEntity>>
     suspend fun getBusinessByRemoteId(businessRemoteId: String): BusinessEntity?
     suspend fun addNewBusiness(businessEntity: BusinessEntity): Long?
+    suspend fun updateBusiness(businessEntity: BusinessEntity)
     suspend fun deleteBusiness(businessEntity: BusinessEntity)
 }

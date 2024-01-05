@@ -1,8 +1,10 @@
 package cz.mendelu.pef.flashyflashcards.remote
 
+import cz.mendelu.pef.flashyflashcards.model.BusinessDTO
 import cz.mendelu.pef.flashyflashcards.model.YelpResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 const val EN_LOCALE = "en_US"
@@ -18,4 +20,10 @@ interface YelpAPI {
         @Query("offset") offset: Int,
         @Query("locale") locale: String
     ): Response<YelpResponse>
+
+    @GET("businesses/{id}")
+    suspend fun getBusinessByID(
+        @Path("id") id: String,
+        @Query("locale") locale: String
+    ): Response<BusinessDTO>
 }

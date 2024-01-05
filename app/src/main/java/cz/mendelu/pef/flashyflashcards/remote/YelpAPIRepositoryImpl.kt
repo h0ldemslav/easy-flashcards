@@ -36,6 +36,13 @@ class YelpAPIRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getBusinessByRemoteID(remoteId: String, locale: String): CommunicationResult<BusinessDTO> {
+        return processResponse(yelpAPI.getBusinessByID(
+            remoteId,
+            locale
+        ))
+    }
+
     override fun convertBusinessDTOToBusiness(businessDTO: BusinessDTO): Business {
         return Business(
             remoteId = businessDTO.id,

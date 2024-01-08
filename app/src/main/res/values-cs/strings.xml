@@ -88,8 +88,8 @@
     <string name="correct_answer">Správná odpověď</string>
     <string name="your_answer">Vaše odpověď</string>
     <string name="failed_to_fetch_test_history">Nepodařilo se načíst historii. Pošlete nám prosím zpětnou vazbu.</string>
-    <string name="test_history_dialog_title">Odstranit záznam z historie testů</string>
-    <string name="test_history_dialog_content">Opravdu chcete tento záznam odstranit? Tato akce je trvalá.</string>
+    <string name="test_history_dialog_title">Odstranit záznam</string>
+    <string name="test_history_dialog_content">Opravdu chcete tento záznam odstranit z historie testů? Tato akce je trvalá.</string>
     <string name="application_version">Verze aplikace</string>
     <string name="cancel_label">Storno</string>
     <string name="theme_light">Světlý</string>

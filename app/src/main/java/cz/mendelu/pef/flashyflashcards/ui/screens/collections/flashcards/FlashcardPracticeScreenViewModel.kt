@@ -145,11 +145,16 @@ class FlashcardPracticeScreenViewModel @Inject constructor(
             data.finish = false
         }
 
+        // Reset history, if in test mode
+        // In training mode `testHistory` is null
         if (testHistory != null) {
+            // Copy to get new history with the same collection id
             testHistory = testHistory?.copy(
+                id = null,
+                numberOfCorrectAnswers = 0,
                 answers = mutableListOf(),
-                timeTaken = 0L,
-                dateOfCompletion = 0L
+                dateOfCompletion = 0L,
+                timeTaken = 0L
             )
         }
 

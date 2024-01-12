@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +48,8 @@ import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.TranslationLanguagesScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.halfMargin
+
+const val TestTagSettingOptionRow = "TestTagSettingOptionRow"
 
 @SettingsNavGraph(start = true)
 @Destination
@@ -173,7 +176,9 @@ fun PreferenceDialog(
                             .clickable {
                                 onOptionClick(appPreference.displayName, option.displayName)
                             }
-                            .padding(bottom = halfMargin()),
+                            .padding(bottom = halfMargin())
+                            .testTag(TestTagSettingOptionRow)
+                        ,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(

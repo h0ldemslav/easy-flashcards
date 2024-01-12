@@ -24,7 +24,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "cz.mendelu.pef.flashyflashcards.HiltTestRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -90,6 +91,18 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+    // Testing
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+
+    // Hilt testing
+    // For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.44")
+    // For local unit tests
+    testImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptTest("com.google.dagger:hilt-compiler:2.44")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
@@ -142,3 +155,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
 }
 
+// For Hilt
+kapt {
+    correctErrorTypes = true
+}

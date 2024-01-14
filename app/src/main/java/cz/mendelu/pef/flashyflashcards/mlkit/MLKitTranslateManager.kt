@@ -172,7 +172,14 @@ class MLKitTranslateManager {
     ): Pair<String, String>? {
         if (sourceCode == null || targetCode == null) return null
 
-        return Pair(codesToLanguages[sourceCode]!!, codesToLanguages[targetCode]!!)
+        val sourceLang = codesToLanguages[sourceCode]
+        val targetLang = codesToLanguages[targetCode]
+
+        return if (sourceLang != null && targetLang != null) {
+            Pair(sourceLang, targetLang)
+        } else {
+            null
+        }
     }
 
     fun getAllAvailableCodesToLanguages(): Map<String, String> {

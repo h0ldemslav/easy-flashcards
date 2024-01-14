@@ -1,8 +1,8 @@
 package cz.mendelu.pef.flashyflashcards
 
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onLast
@@ -45,7 +45,7 @@ class SettingsUiTest {
             val darkThemeLabel = composeTestRule.activity.getString(R.string.theme_dark)
             val theme = mutableStateOf(lightThemeLabel)
 
-            composeTestRule.activity.setContent {
+            activity.setContent {
                 navController = rememberNavController()
 
                 FlashyFlashcardsTheme(darkTheme = theme.value == darkThemeLabel) {
@@ -56,9 +56,7 @@ class SettingsUiTest {
                 }
             }
 
-            onNodeWithText(themeSettingLabel)
-                .performClick()
-
+            onNodeWithText(themeSettingLabel).performClick()
             waitForIdle()
 
             onAllNodesWithTag(TestTagSettingOptionRow)
@@ -72,6 +70,35 @@ class SettingsUiTest {
             Thread.sleep(1000)
 
             onNodeWithText(darkThemeLabel).assertExists()
+
+            Thread.sleep(2000)
+        }
+    }
+
+    @Test
+    fun testLanguageSettingChange() {
+        with(composeTestRule) {
+            val languageSettingLabel = activity.getString(R.string.app_language)
+            val csLanguageLabel = activity.getString(R.string.language_cs)
+
+            activity.setContent {
+                navController = rememberNavController()
+
+                FlashyFlashcardsTheme(darkTheme = false) {
+                    DestinationsNavHostWrapper(
+                        navGraph = NavGraphs.settings,
+                        navController = navController
+                    )
+                }
+            }
+
+            onNodeWithText(languageSettingLabel).performClick()
+            waitForIdle()
+
+            onNodeWithText(csLanguageLabel).performClick()
+            Thread.sleep(2000)
+
+            onNodeWithText(csLanguageLabel).assertIsDisplayed()
 
             Thread.sleep(2000)
         }

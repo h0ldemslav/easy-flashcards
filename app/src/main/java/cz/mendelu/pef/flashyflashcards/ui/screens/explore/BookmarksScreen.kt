@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -29,6 +30,9 @@ import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.screens.destinations.DetailScreenDestination
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
 import cz.mendelu.pef.flashyflashcards.ui.theme.mediumMargin
+
+const val TestTagBookmarksList = "TestTagBookmarksList"
+const val TestTagFilterTextField = "TestTagFilterTextField"
 
 @ExploreNavGraph
 @Destination
@@ -87,12 +91,13 @@ fun BookmarksScreenContent(
                 supportingText = stringResource(id = R.string.bookmarks_search_field_hint),
                 onDone = {
                     focusManager.clearFocus()
-                }
+                },
+                modifier = Modifier.testTag(TestTagFilterTextField)
             )
 
             Spacer(modifier = Modifier.height(mediumMargin()))
 
-            LazyColumn {
+            LazyColumn(modifier = Modifier.testTag(TestTagBookmarksList)) {
                 uiState.data!!.forEach { business ->
                     if (onListRowAppear(searchInput, business)) {
                         item {

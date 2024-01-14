@@ -1,8 +1,11 @@
 package cz.mendelu.pef.flashyflashcards.ui.screens.explore
 
+import android.location.Location
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
 import cz.mendelu.pef.flashyflashcards.R
 import cz.mendelu.pef.flashyflashcards.architecture.BaseViewModel
 import cz.mendelu.pef.flashyflashcards.architecture.CommunicationResult
@@ -23,6 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.round
 
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
@@ -123,6 +127,16 @@ class DetailScreenViewModel @Inject constructor(
                     data = business
                 )
             }
+        }
+    }
+
+    override fun getDistance(businessLocation: LatLng, userLocation: LatLng, inKm: Boolean): Double {
+        val distance = round(SphericalUtil.computeDistanceBetween(businessLocation, userLocation))
+
+        return if (inKm) {
+            distance / 1000.0
+        } else {
+            distance
         }
     }
 

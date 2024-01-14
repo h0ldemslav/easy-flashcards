@@ -114,4 +114,7 @@
     <string name="downloaded_languages">Uložené jazyky</string>
     <string name="failed_to_get_downloaded_languages">Nepodařilo se načíst stažené jazyky, zkuste to znovu.</string>
     <string name="failed_to_delete_downloaded_language">Nepovedlo se odstranit jazyk, zkuste to znovu</string>
+    <string name="street">Ulice</string>
+    <string name="coordinates">Souřadnice</string>
+    <string name="distance">Vzdálenost</string>
 </resources>

@@ -8,6 +8,7 @@ import android.location.Location
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -67,6 +68,7 @@ import cz.mendelu.pef.flashyflashcards.ui.elements.PlaceholderElement
 import cz.mendelu.pef.flashyflashcards.ui.screens.ScreenErrors
 import cz.mendelu.pef.flashyflashcards.ui.theme.PinkPrimaryLight
 import cz.mendelu.pef.flashyflashcards.ui.theme.basicMargin
+import cz.mendelu.pef.flashyflashcards.ui.theme.halfMargin
 import cz.mendelu.pef.flashyflashcards.utils.GpsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -156,7 +158,7 @@ fun DetailScreenContent(
         val uriHandler = LocalUriHandler.current
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(basicMargin()),
+            verticalArrangement = Arrangement.spacedBy(halfMargin()),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -174,7 +176,11 @@ fun DetailScreenContent(
             )
 
             Text(
-                text = uiState.data!!.displayAddress.joinToString(", ")
+                text = "${stringResource(id = R.string.street)}: ${uiState.data!!.displayAddress.joinToString(", ")}"
+            )
+
+            Text(
+                text = "${stringResource(id = R.string.coordinates)}: ${uiState.data!!.latitude}, ${uiState.data!!.longitude}"
             )
 
             HyperlinkText(
@@ -183,11 +189,25 @@ fun DetailScreenContent(
                 uriHandler = uriHandler
             )
 
+            AnimatedVisibility(userLocation != null) {
+                Text(
+                    text = "${stringResource(id = R.string.distance)}: ${
+                        actions.getDistance(
+                            LatLng(
+                                uiState.data!!.latitude,
+                                uiState.data!!.longitude
+                            ),
+                            userLocation!!,
+                            true
+                        )
+                    } km"
+                )
+            }
+
             Row(
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 if (uiState.data!!.whenAdded == null) {
                     Button(
@@ -255,6 +275,7 @@ fun DetailScreenGoogleMap(
     }
 
     Box(
+        contentAlignment = Alignment.BottomEnd,
         modifier = Modifier
             .fillMaxWidth()
             .height(450.dp)

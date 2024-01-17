@@ -9,8 +9,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.test.rule.GrantPermissionRule
 import cz.mendelu.pef.flashyflashcards.database.businesses.BusinessesRepository
 import cz.mendelu.pef.flashyflashcards.datastore.DataStoreRepository
+import cz.mendelu.pef.flashyflashcards.fake.FakeBusinessesRepositoryImpl
 import cz.mendelu.pef.flashyflashcards.fake.FakeYelpAPIRepositoryImpl
 import cz.mendelu.pef.flashyflashcards.model.DataSourceType
+import cz.mendelu.pef.flashyflashcards.model.entities.BusinessEntity
 import cz.mendelu.pef.flashyflashcards.remote.YelpAPIRepository
 import cz.mendelu.pef.flashyflashcards.ui.activities.MainActivity
 import cz.mendelu.pef.flashyflashcards.ui.screens.explore.DetailScreen
@@ -25,10 +27,54 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 class ExploreDetailUiTest {
+    val businessEntities = mutableListOf(
+        BusinessEntity(
+            id = 0,
+            remoteId = "remote 0",
+            name = "Vasamuseet",
+            imageUrl = "",
+            category = "Museums",
+            displayAddress = "Stockholm",
+            businessUrl = "",
+            rating = "4.5",
+            reviewCount = 39,
+            latitude = 59.32811,
+            longitude = 18.09139,
+            whenAdded = 0L
+        ),
+        BusinessEntity(
+            id = 1,
+            remoteId = "remote 1",
+            name = "Moravska knihovna",
+            imageUrl = "",
+            category = "Libraries",
+            displayAddress = "Brno",
+            businessUrl = "",
+            rating = "4",
+            reviewCount = 2,
+            latitude = 49.12,
+            longitude = 16.35,
+            whenAdded = 0L
+        ),
+        BusinessEntity(
+            id = 2,
+            remoteId = "remote 2",
+            name = "Narodni muzeum",
+            imageUrl = "",
+            category = "Museums",
+            displayAddress = "Praha",
+            businessUrl = "",
+            rating = "4.5",
+            reviewCount = 51,
+            latitude = 50.4,
+            longitude = 14.25,
+            whenAdded = 0L
+        )
+    )
+
     @Inject
     lateinit var dataStoreRepository: DataStoreRepository
-    @Inject
-    lateinit var businessesRepository: BusinessesRepository
+    private lateinit var businessesRepository: BusinessesRepository
     private lateinit var yelpAPIRepository: YelpAPIRepository
     private lateinit var navController: NavHostController
     private lateinit var viewModel: DetailScreenViewModel
@@ -51,6 +97,7 @@ class ExploreDetailUiTest {
         hiltRule.inject()
 
         yelpAPIRepository = FakeYelpAPIRepositoryImpl()
+        businessesRepository = FakeBusinessesRepositoryImpl(businessEntities)
 
         viewModel = DetailScreenViewModel(
             yelpAPIRepository = yelpAPIRepository,
@@ -61,22 +108,25 @@ class ExploreDetailUiTest {
         composeTestRule.activity.setContent {
             navController = rememberNavController()
 
+            val dataSourceType = DataSourceType.Local(
+                businessEntities.firstOrNull()?.remoteId ?: ""
+            )
+
             DetailScreen(
                 navController = navController,
                 viewModel = viewModel,
-                dataSourceType = DataSourceType.Remote(viewModel.uiState.data?.remoteId ?: "")
+                dataSourceType = dataSourceType
             )
         }
     }
 
     @Test
-    fun testMap() {
+    fun testBusinessDelete() {
         with(composeTestRule) {
             // Test succeeds, if it's run separately. Fails if it's run with other tests
-//            waitUntil { viewModel.uiState.loading }
-//            onNodeWithTag(TestTagDetailMap, useUnmergedTree = true).assertIsDisplayed()
-//
-//            Thread.sleep(2000)
+            onNodeWithTag(TestTagDetailMap, useUnmergedTree = true).assertIsDisplayed()
+
+            Thread.sleep(2000)
         }
     }
 }

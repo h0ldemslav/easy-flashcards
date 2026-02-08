@@ -1,6 +1,6 @@
 # Project Description
 
-Easy Flashcards is a simple application that helps users learn foreign language vocabulary using flashcards. The application supports:
+Flashy Flashcards is a simple application that helps users learn foreign language vocabulary using flashcards. The application supports:
 - Short user onboarding
 - Creation of vocabulary collections
 - Exercises and testing (no hints) of vocabulary collections

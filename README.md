@@ -1,5 +1,7 @@
 # Project Description
 
+**NOTE**: You need to supplement your own Google API Key in the android manifest and create a variable `API_KEY` in `local.properties` and assign to it your Yelp Fusion API key. 
+
 Flashy Flashcards is a simple application that helps users learn foreign language vocabulary using flashcards. The application supports:
 - Short user onboarding
 - Creation of vocabulary collections
